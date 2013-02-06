@@ -10,7 +10,7 @@
       <link href="./css/site.css" rel="stylesheet">
        <style>
          body {
-           padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+           padding-top: 80px; /* 60px to make the container go all the way to the bottom of the topbar */
          }
        </style>
        <link href="./css/bootstrap-responsive.css" rel="stylesheet">
@@ -23,6 +23,7 @@
 
          var map;
          var line;
+         var frontZIndex = 100;
 
          var people = [
 
@@ -47,14 +48,32 @@
             line = new Microsoft.Maps.Polyline(route, {strokeColor: new Microsoft.Maps.Color(200, 72, 118, 255)});
             map.entities.push(line);
 
+            var totalDistanceRun = 0;
+
             for (var i = 0; i < people.length; i++) 
             {
+              // Create pin
                var person = people[i];
                person.Pin = new Microsoft.Maps.Pushpin(getLocForDistance(person.Distance), {icon: person.Image, width: 64, height: 108, anchor: new Microsoft.Maps.Point(32,100)}); 
+
+               // Add to map
                map.entities.push(person.Pin);
-               $("#people_list").append('<li><span class="person-id">' + i + '</span>' + person.Name + ': ' + person.Distance + ' miles' + '</li>');
+
+               // Add to list view
+               $("#people_list").append('<li><span class="person-id">' + i + '</span>' + '<input type="checkbox" checked="yes"/>' + person.Name + ': ' + person.Distance + ' miles' + '</li>');
+
+               // Add click event
+               Microsoft.Maps.Events.addHandler(person.Pin, 'click', function(e) {
+                if (e.targetType === 'pushpin') {
+                  e.target.setOptions({zIndex: frontZIndex});
+                  frontZIndex++;
+                }
+               }); 
+
+               totalDistanceRun += person.Distance;
             }
 
+            $('#TotalRun').text(totalDistanceRun);
          }
 
          function getLocForDistance(distance)
@@ -85,7 +104,7 @@
                 prevLon = lon;
             }
             // Distance is further than the end, just show the end
-            return {latitude: prevLat, longitude: prevLon};;
+            return {latitude: prevLat, longitude: prevLon, Total: total};;
          }
 
          function haversineDistance(latlong1,latlong2){
@@ -113,10 +132,18 @@
          }
 
          $(document).ready(function() {
-           $('#people_list').on('click', 'li', function() {
-            var person_id = $(this).children('.person-id').text();
-            selected_person = people[person_id];
-            alert(selected_person.Name);
+           $('#people_list').on('click', 'li, li input', function(event) {
+
+            if (event.currentTarget.localName === 'input') {
+              var isChecked = $(this).prop('checked') == 'yes';
+              
+            } else {
+              var person_id = $(this).children('.person-id').text();
+              selected_person = people[person_id];
+              map.setView({ zoom: 11, center: new Microsoft.Maps.Location(selected_person.Pin.getLocation().latitude, selected_person.Pin.getLocation().longitude) });
+              selected_person.Pin.setOptions({zIndex: frontZIndex});
+              frontZIndex++;
+            }
            });
          });
 
@@ -125,20 +152,20 @@
    <body onload="GetMap();"> 
       <div class="navbar navbar-inverse navbar-fixed-top">
          <div class="navbar-inner">
-            <div class="container">
-               <a class="brand" href="#">Proclaimathon</a>
-            </div>
+          <a class="brand" href="#"><img src="./img/proclaimathon-logo.png"></img></a>
          </div>
       </div>
       <div class="well" style="margin-left: 10px; width:800px; height:600px;">
         <div id='mapDiv' style="position:absolute; width:800px; height:600px; left:25px;"></div>
       </div>
-      <div class="well" style="left: 890px; position:absolute; top: 60px; width:200px; height:600px;">
+      <div class="well" style="left: 890px; position:absolute; top: 80px; width:250px; height:600px;">
+        <h4>Runners</h4>
         <ul id="people_list" class="unstyled"></ul>
+        <h4>Stats</h4>
+        <ul class="unstyled">
+          <li>Route Distance: 993.14</li>
+          <li>Total Distance Run: <span id="TotalRun"></span> miles</li>
+        </ul>
       </div>
-<!--       <p style="position:absolute; top: 630px;">
-         <input type="textbox" id="distance" value="100"/>
-         <input type="button" value="Show" onclick="decodeRoute()"/>
-      </p> -->
    </body>
 </html>

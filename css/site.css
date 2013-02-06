@@ -1,3 +1,15 @@
 .person-id {
     display: none;
 }
+
+#mapDiv {
+    border: 1px solid #000000; 
+}
+
+.brand {
+    margin-left: 5px;
+}
+
+#people_list input {
+    margin-right: 5px;
+}
