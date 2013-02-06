@@ -26,14 +26,14 @@
 
          var people = [
 
-            {Name: "Andrew Pirie", Image: "./Pirie.jpg", Distance: 91.35, Pin: null},
-            {Name: "Ian Childs", Image: "./Childs.jpg", Distance: 53.03, Pin: null},
-            {Name: "Dan Jones", Image: "./Jones.jpg", Distance: 13.50, Pin: null},
-            {Name: "James Palfreyman", Image: "./Palf.jpg", Distance: 70.91, Pin: null},
-            {Name: "Paul Jeffrey", Image: "./Jeffrey.jpg", Distance: 107.59, Pin: null},
-            {Name: "Nigel Pinto", Image: "./Pinto.jpg", Distance: 44.89, Pin: null},
-            {Name: "Roy Bird", Image: "./Bird.jpg", Distance: 44.80, Pin: null},
-            {Name: "Richard Buchan", Image: "./Buchan.jpg", Distance: 0.00, Pin: null}
+            {Name: "Andrew Pirie", Image: "./img/Pirie.png", Distance: 91.35, Pin: null},
+            {Name: "Ian Childs", Image: "./img/Childs.png", Distance: 53.03, Pin: null},
+            {Name: "Dan Jones", Image: "./img/Jones.png", Distance: 13.50, Pin: null},
+            {Name: "James Palfreyman", Image: "./img/Palf.png", Distance: 70.91, Pin: null},
+            {Name: "Paul Jeffrey", Image: "./img/Jeffrey.png", Distance: 107.59, Pin: null},
+            {Name: "Nigel Pinto", Image: "./img/Pinto.png", Distance: 44.89, Pin: null},
+            {Name: "Roy Bird", Image: "./img/Bird.png", Distance: 44.80, Pin: null},
+            {Name: "Richard Buchan", Image: "./img/Buchan.png", Distance: 0.00, Pin: null}
          ]
 
          function GetMap()
@@ -50,7 +50,7 @@
             for (var i = 0; i < people.length; i++) 
             {
                var person = people[i];
-               person.Pin = new Microsoft.Maps.Pushpin(getLocForDistance(person.Distance), {icon: person.Image, width: 50, height: 50}); 
+               person.Pin = new Microsoft.Maps.Pushpin(getLocForDistance(person.Distance), {icon: person.Image, width: 64, height: 108, anchor: new Microsoft.Maps.Point(32,100)}); 
                map.entities.push(person.Pin);
                $("#people_list").append('<li><span class="person-id">' + i + '</span>' + person.Name + ': ' + person.Distance + ' miles' + '</li>');
             }
