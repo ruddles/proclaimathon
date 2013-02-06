@@ -4,8 +4,10 @@
    <head>
       <title></title>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+      <meta name="google" value="notranslate"> 
 
       <link href="./css/bootstrap.css" rel="stylesheet">
+      <link href="./css/site.css" rel="stylesheet">
        <style>
          body {
            padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
@@ -14,6 +16,7 @@
        <link href="./css/bootstrap-responsive.css" rel="stylesheet">
 
       <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 
       <script type="text/javascript" src="./route.js" ></script>
       <script type="text/javascript">
@@ -23,14 +26,14 @@
 
          var people = [
 
-            {Name: "Andrew Pirie", Image: "./Pirie.jpg", Distance: 91.35},
-            {Name: "Ian Childs", Image: "./Childs.jpg", Distance: 53.03},
-            {Name: "Dan Jones", Image: "./Jones.jpg", Distance: 13.50},
-            {Name: "James Palfreyman", Image: "./Palf.jpg", Distance: 70.91},
-            {Name: "Paul Jeffrey", Image: "./Jeffrey.jpg", Distance: 107.59},
-            {Name: "Nigel Pinto", Image: "./Pinto.jpg", Distance: 44.89},
-            {Name: "Roy Bird", Image: "./Bird.jpg", Distance: 44.80},
-            {Name: "Richard Buchan", Image: "./Buchan.jpg", Distance: 0.00}
+            {Name: "Andrew Pirie", Image: "./Pirie.jpg", Distance: 91.35, Pin: null},
+            {Name: "Ian Childs", Image: "./Childs.jpg", Distance: 53.03, Pin: null},
+            {Name: "Dan Jones", Image: "./Jones.jpg", Distance: 13.50, Pin: null},
+            {Name: "James Palfreyman", Image: "./Palf.jpg", Distance: 70.91, Pin: null},
+            {Name: "Paul Jeffrey", Image: "./Jeffrey.jpg", Distance: 107.59, Pin: null},
+            {Name: "Nigel Pinto", Image: "./Pinto.jpg", Distance: 44.89, Pin: null},
+            {Name: "Roy Bird", Image: "./Bird.jpg", Distance: 44.80, Pin: null},
+            {Name: "Richard Buchan", Image: "./Buchan.jpg", Distance: 0.00, Pin: null}
          ]
 
          function GetMap()
@@ -47,39 +50,11 @@
             for (var i = 0; i < people.length; i++) 
             {
                var person = people[i];
-               var pushpin = new Microsoft.Maps.Pushpin(getLocForDistance(person.Distance), {icon: person.Image, width: 50, height: 50}); 
-               map.entities.push(pushpin);
+               person.Pin = new Microsoft.Maps.Pushpin(getLocForDistance(person.Distance), {icon: person.Image, width: 50, height: 50}); 
+               map.entities.push(person.Pin);
+               $("#people_list").append('<li><span class="person-id">' + i + '</span>' + person.Name + ': ' + person.Distance + ' miles' + '</li>');
             }
 
-         }
-
-         function createDirectionsManager()
-         {
-            directionsManager = new Microsoft.Maps.Directions.DirectionsManager(map);
-            directionsManager.resetDirections();
-            Microsoft.Maps.Events.addHandler(directionsManager, 'directionsUpdated', function() 
-                     { 
-                        map.setView({ zoom: 6, center: new Microsoft.Maps.Location(47.5153879564082, 4.82774019241333)});
-
-                        for (var i = 0; i < people.length; i++) {
-                           var person = people[i];
-                           var pushpin = new Microsoft.Maps.Pushpin(getLocForDistance(person.Distance), {icon: person.Image, width: 50, height: 50}); 
-                           map.entities.push(pushpin);
-                        }
-                     });
-            // Set Route Mode to driving 
-            directionsManager.setRequestOptions({ routeMode: Microsoft.Maps.Directions.RouteMode.driving, routeDraggable: false });
-            directionsManager.setRenderOptions({
-                itineraryContainer: document.getElementById('directionsItinerary'),
-                waypointPushpinOptions:{visible:false},
-                viapointPushpinOptions:{visible:false}
-            });
-            var seattleWaypoint = new Microsoft.Maps.Directions.Waypoint({ address: 'Southsea, UK', shortAddress: 'Southsea' });
-            directionsManager.addWaypoint(seattleWaypoint);
-            var tacomaWaypoint = new Microsoft.Maps.Directions.Waypoint({ address: 'Florance, Italy' });
-            directionsManager.addWaypoint(tacomaWaypoint);
-
-            directionsManager.calculateDirections();
          }
 
          function getLocForDistance(distance)
@@ -137,6 +112,14 @@
             if (console) console.log(message);
          }
 
+         $(document).ready(function() {
+           $('#people_list').on('click', 'li', function() {
+            var person_id = $(this).children('.person-id').text();
+            selected_person = people[person_id];
+            alert(selected_person.Name);
+           });
+         });
+
       </script>
    </head>
    <body onload="GetMap();"> 
@@ -147,7 +130,12 @@
             </div>
          </div>
       </div>
-      <div id='mapDiv' style="position:absolute; width:800px; height:600px;"></div>
+      <div class="well" style="margin-left: 10px; width:800px; height:600px;">
+        <div id='mapDiv' style="position:absolute; width:800px; height:600px; left:25px;"></div>
+      </div>
+      <div class="well" style="left: 890px; position:absolute; top: 60px; width:200px; height:600px;">
+        <ul id="people_list" class="unstyled"></ul>
+      </div>
 <!--       <p style="position:absolute; top: 630px;">
          <input type="textbox" id="distance" value="100"/>
          <input type="button" value="Show" onclick="decodeRoute()"/>
