@@ -27,12 +27,12 @@
 
          var people = [
 
-            {Name: "Andrew Pirie", Image: "./img/Pirie.png", Distance: 91.35, Pin: null},
+            {Name: "Andrew Pirie", Image: "./img/Pirie.png", Distance: 100.59, Pin: null},
             {Name: "Ian Childs", Image: "./img/Childs.png", Distance: 53.03, Pin: null},
             {Name: "Dan Jones", Image: "./img/Jones.png", Distance: 13.50, Pin: null},
-            {Name: "James Palfreyman", Image: "./img/Palf.png", Distance: 70.91, Pin: null},
-            {Name: "Paul Jeffrey", Image: "./img/Jeffrey.png", Distance: 107.59, Pin: null},
-            {Name: "Nigel Pinto", Image: "./img/Pinto.png", Distance: 44.89, Pin: null},
+            {Name: "James Palfreyman", Image: "./img/Palf.png", Distance: 78.98, Pin: null},
+            {Name: "Paul Jeffrey", Image: "./img/Jeffrey.png", Distance: 120.13, Pin: null},
+            {Name: "Nigel Pinto", Image: "./img/Pinto.png", Distance: 51.39, Pin: null},
             {Name: "Roy Bird", Image: "./img/Bird.png", Distance: 44.80, Pin: null},
             {Name: "Richard Buchan", Image: "./img/Buchan.png", Distance: 0.00, Pin: null}
          ]
@@ -60,7 +60,7 @@
                map.entities.push(person.Pin);
 
                // Add to list view
-               $("#people_list").append('<li><span class="person-id">' + i + '</span>' + '<input type="checkbox" checked="yes"/>' + person.Name + ': ' + person.Distance + ' miles' + '</li>');
+               $("#people_list").append('<li><span class="person-id">' + i + '</span>' + person.Name + ': ' + person.Distance + ' miles' + '</li>');
 
                // Add click event
                Microsoft.Maps.Events.addHandler(person.Pin, 'click', function(e) {
