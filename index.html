@@ -27,11 +27,11 @@
 
          var people = [
 
-            {Name: "Andrew Pirie", Image: "./img/Pirie.png", Distance: 100.59, Pin: null},
-            {Name: "Ian Childs", Image: "./img/Childs.png", Distance: 53.03, Pin: null},
+            {Name: "Andrew Pirie", Image: "./img/Pirie.png", Distance: 107.21, Pin: null},
+            {Name: "Ian Childs", Image: "./img/Childs.png", Distance: 62.55, Pin: null},
             {Name: "Dan Jones", Image: "./img/Jones.png", Distance: 13.50, Pin: null},
-            {Name: "James Palfreyman", Image: "./img/Palf.png", Distance: 78.98, Pin: null},
-            {Name: "Paul Jeffrey", Image: "./img/Jeffrey.png", Distance: 120.13, Pin: null},
+            {Name: "James Palfreyman", Image: "./img/Palf.png", Distance: 82.27, Pin: null},
+            {Name: "Paul Jeffrey", Image: "./img/Jeffrey.png", Distance: 143.44, Pin: null},
             {Name: "Nigel Pinto", Image: "./img/Pinto.png", Distance: 51.39, Pin: null},
             {Name: "Roy Bird", Image: "./img/Bird.png", Distance: 44.80, Pin: null},
             {Name: "Richard Buchan", Image: "./img/Buchan.png", Distance: 0.00, Pin: null}
@@ -47,6 +47,12 @@
             map.setView({ zoom: 6, center: new Microsoft.Maps.Location(47.5153879564082, 4.82774019241333)});
             line = new Microsoft.Maps.Polyline(route, {strokeColor: new Microsoft.Maps.Color(200, 72, 118, 255)});
             map.entities.push(line);
+
+            people.sort(function(a,b) {
+              if (a.Distance === b.Distance) return 0;
+              if (a.Distance > b.Distance) return -1;
+              return 1;
+            });
 
             var totalDistanceRun = 0;
 
